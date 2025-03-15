@@ -19,7 +19,7 @@
 	level = 1
 	check_flags = DISC_CHECK_CONSCIOUS | DISC_CHECK_CAPABLE | DISC_CHECK_IMMOBILE | DISC_CHECK_LYING
 
-	duration_length = 15 SECONDS //TT duration is one hour, but this causes dizzyness.
+	duration_length = 10 SECONDS //TT duration is one hour, but this causes dizzyness.
 	cooldown_length = 20 SECONDS
 	duration_override = TRUE
 
@@ -52,7 +52,7 @@
 	if(isliving(target))
 		var/mob/living/L = target
 		L.adjustFireLoss(10)
-		L.AdjustKnockdown(5 SECONDS)
+		L.AdjustKnockdown(4 SECONDS)
 		L.adjustStaminaLoss(50)
 	return ..()
 
