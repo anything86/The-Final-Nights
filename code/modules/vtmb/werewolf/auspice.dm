@@ -26,7 +26,7 @@
 	var/list/spiral = list(
 		/datum/action/gift/stinky_fur = 1,
 		/datum/action/gift/venom_claws = 2,
-		/datum/action/gift/burning_scars = 3
+		/datum/action/gift/bloody_feast = 3
 	)
 
 /datum/auspice/proc/on_gain(var/mob/living/carbon/C)
