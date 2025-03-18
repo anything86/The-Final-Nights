@@ -70,7 +70,7 @@
 /datum/discipline_power/quietus/scorpions_touch/activate()
 	. = ..()
 	//this should probably be changed to a normal ranged attack
-	owner.put_in_active_hand(new /obj/item/melee/touch_attack/quietus(owner))
+	owner.put_in_active_hand(new /obj/item/melee/touch_attack/quietus(owner), TRUE)
 
 //DAGON'S CALL
 /datum/discipline_power/quietus/dagons_call
@@ -212,4 +212,4 @@
 /datum/discipline_power/quietus/taste_of_death/activate()
 	. = ..()
 	//should be changed to a ranged attack targeting turfs
-	owner.put_in_active_hand(new /obj/item/gun/magic/quietus(owner))
+	owner.put_in_active_hand(new /obj/item/gun/magic/quietus(owner), TRUE)
