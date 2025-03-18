@@ -346,8 +346,8 @@
 	mob_size = MOB_SIZE_HUGE
 	speak_chance = 0
 	speed = -0.4
-	maxHealth = 200
-	health = 200
+	maxHealth = 275
+	health = 275
 	butcher_results = list(/obj/item/stack/human_flesh = 10)
 	harm_intent_damage = 5
 	melee_damage_lower = 30
@@ -365,8 +365,8 @@
 	possible_a_intents = list(INTENT_HELP, INTENT_GRAB, INTENT_DISARM, INTENT_HARM)
 
 /mob/living/simple_animal/hostile/gangrel/better
-	maxHealth = 250
-	health = 250
+	maxHealth = 325
+	health = 325
 	melee_damage_lower = 35
 	melee_damage_upper = 35
 	speed = -0.6
@@ -374,8 +374,8 @@
 /mob/living/simple_animal/hostile/gangrel/best
 	icon_state = "gangrel_m"
 	icon_living = "gangrel_m"
-	maxHealth = 300 //More in line with new health values.
-	health = 300
+	maxHealth = 400 //More in line with new health values.
+	health = 400
 	melee_damage_lower = 40
 	melee_damage_upper = 40
 	speed = -0.8
