@@ -100,6 +100,7 @@
 	for(var/mob/living/carbon/C in range(5, src))
 		if(apply_stun_others)
 			C.Knockdown(20)
+			C.Stun(10)
 		shake_camera(C, (6-get_dist(C, src))+1, (6-get_dist(C, src)))
 	if(apply_stun_self)
 		Knockdown(20)
