@@ -230,8 +230,8 @@
 
 /obj/machinery/mineral/equipment_vendor/restricted/hospital
 	jobs_allowed = list(
-		"Doctor" = 150,
-		"Clinic Director" = 750,
+		"Doctor" = 1000,
+		"Clinic Director" = 5000,
 	)
 	prize_list = list(
 		new /datum/data/mining_equipment("iron pill bottle", /obj/item/storage/pill_bottle/iron, 5),

@@ -92,6 +92,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/preferred_ai_core_display = "Blue"
 	var/prefered_security_department = SEC_DEPT_RANDOM
 
+	var/list/alt_titles_preferences = list() // TFN EDIT: alt job titles
+
 	//Quirk list
 	var/list/all_quirks = list()
 
@@ -468,12 +470,20 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 					if(clane?.name == CLAN_NONE)
 						generation_allowed = FALSE
 					if(generation_allowed)
-						if(generation_bonus)
-							dat += " (+[generation_bonus]/[min(MAX_PUBLIC_GENERATION-1, generation-MAX_PUBLIC_GENERATION)])"
-						if(true_experience >= 20 && generation_bonus < max(0, generation-MAX_PUBLIC_GENERATION))
-							dat += " <a href='?_src_=prefs;preference=generation;task=input'>Claim generation bonus (20)</a><BR>"
+						if(SSwhitelists.is_whitelisted(user.ckey, TRUSTED_PLAYER))
+							if(generation_bonus)
+								dat += " (+[generation_bonus]/[min(MAX_TRUSTED_GENERATION-1, generation-MAX_TRUSTED_GENERATION)])"
+							if(true_experience >= 20 && generation_bonus < max(0, generation-MAX_TRUSTED_GENERATION))
+								dat += " <a href='?_src_=prefs;preference=generation;task=input'>Claim generation bonus (20)</a><BR>"
+							else
+								dat += "<BR>"
 						else
-							dat += "<BR>"
+							if(generation_bonus)
+								dat += " (+[generation_bonus]/[min(MAX_PUBLIC_GENERATION-1, generation-MAX_PUBLIC_GENERATION)])"
+							if(true_experience >= 20 && generation_bonus < max(0, generation-MAX_PUBLIC_GENERATION))
+								dat += " <a href='?_src_=prefs;preference=generation;task=input'>Claim generation bonus (20)</a><BR>"
+							else
+								dat += "<BR>"
 					else
 						dat += "<BR>"
 				if("Kuei-Jin")
@@ -1360,10 +1370,20 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 			HTML += "<tr bgcolor='[job.selection_color]'><td width='60%' align='right'>"
 			var/rank = job.title
+			// TFN EDIT START: alt job titles
+			var/displayed_rank = rank
+			if(length(job.alt_titles) && (rank in alt_titles_preferences))
+				displayed_rank = alt_titles_preferences[rank]
+			// TFN EDIT END
 			lastJob = job
 			if(is_banned_from(user.ckey, rank))
 				HTML += "<font color=red>[rank]</font></td><td><a href='?_src_=prefs;bancheck=[rank]'> BANNED</a></td></tr>"
 				continue
+			// Jobs can only be whitelisted under Trusted Player, so that's all it checks for.
+			if(job.whitelisted)
+				if(!SSwhitelists.is_whitelisted(user.ckey, TRUSTED_PLAYER))
+					HTML += "<font color=#290204>[rank]</font></td><td><font color=#290204> WHITELISTED</font></td></tr>"
+					continue
 			var/required_playtime_remaining = job.required_playtime_remaining(user.client)
 			//<font color=red>text</font> (Zamenil potomu chto slishkom rezhet glaza
 			if(required_playtime_remaining && !bypass)
@@ -1394,10 +1414,16 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 			if((job_preferences[SSjob.overflow_role] == JP_LOW) && (rank != SSjob.overflow_role) && !is_banned_from(user.ckey, SSjob.overflow_role))
 				HTML += "<font color=orange>[rank]</font></td><td></td></tr>"
 				continue
-			if((rank in GLOB.leader_positions) || (rank == "AI"))//Bold head jobs
-				HTML += "<b><span class='dark'>[rank]</span></b>"
+			// TFN EDIT START: alt job titles
+			var/rank_title_line = "[displayed_rank]"
+			if(length(job.alt_titles) && (rank in GLOB.leader_positions))//Bold head jobs
+				rank_title_line = "<b><a href='?_src_=prefs;preference=job;task=alt_title;job_title=[job.title]'>[rank_title_line]</a></b>"
+			else if(length(job.alt_titles))
+				rank_title_line = "<a href='?_src_=prefs;preference=job;task=alt_title;job_title=[job.title]'>[rank_title_line]</a>"
 			else
-				HTML += "<span class='dark'>[rank]</span>"
+				rank_title_line = "<span class='dark'>[rank]</span>"
+			HTML += rank_title_line
+			// TFN EDIT END
 
 			HTML += "</td><td width='40%'>"
 
@@ -1651,6 +1677,23 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 					if(BERANDOMJOB)
 						joblessrole = RETURNTOLOBBY
 				SetChoices(user)
+			// TFN EDIT START: alt job titles
+			if("alt_title")
+				var/job_title = href_list["job_title"]
+				var/titles_list = list(job_title)
+				var/datum/job/J = SSjob.GetJob(job_title)
+				for(var/alternative_titles in J.alt_titles)
+					titles_list += alternative_titles
+				var/chosen_title
+				chosen_title = tgui_input_list(user, "Choose your job's title:", "Job Preference", sortList(titles_list))
+				if(chosen_title)
+					if(chosen_title == job_title)
+						if(alt_titles_preferences[job_title])
+							alt_titles_preferences.Remove(job_title)
+					else
+						alt_titles_preferences[job_title] = chosen_title
+				SetChoices(user)
+			// TFN EDIT END
 			if("setJobLevel")
 				UpdateJobPreference(user, href_list["text"], text2num(href_list["level"]))
 			else
@@ -2377,7 +2420,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 						return
 
 					true_experience -= 20
-					generation_bonus = min(generation_bonus + 1, max(0, generation-MAX_PUBLIC_GENERATION))
+					if(SSwhitelists.is_whitelisted(user.ckey, TRUSTED_PLAYER))
+						generation_bonus = min(generation_bonus + 1, max(0, generation-MAX_TRUSTED_GENERATION))
+					else
+						generation_bonus = min(generation_bonus + 1, max(0, generation-MAX_PUBLIC_GENERATION))
 
 				if("friend_text")
 					var/new_text = tgui_input_text(user, "What a Friend knows about me:", "Character Preference", max_length = 512)
@@ -2432,11 +2478,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 					log_game("[user] has set their Headshot image to '[headshot_link]'.")
 				// TFN EDIT ADDITION END
 				if("change_appearance")
-					if((true_experience < 3) || !slotlocked)
+					if(!slotlocked)
 						return
 
 					slotlocked = FALSE
-					true_experience -= 3
 
 				if("reset_with_bonus")
 					if((clane?.name == "Caitiff") || !generation_bonus)

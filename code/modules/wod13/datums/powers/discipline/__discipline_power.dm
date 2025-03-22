@@ -500,7 +500,9 @@
 	if (toggled && (duration_length == 0))
 		return
 
-	duration_timers.Add(addtimer(CALLBACK(src, PROC_REF(duration_expire), target), duration_length, TIMER_STOPPABLE | TIMER_DELETE_ME))
+	//REFACTOR ME
+	var/full_duration_length = duration_length + owner.discipline_time_plus
+	duration_timers.Add(addtimer(CALLBACK(src, PROC_REF(duration_expire), target), full_duration_length, TIMER_STOPPABLE | TIMER_DELETE_ME))
 
 /**
  * Overridable proc handling the power's cooldown, which is a timer that triggers the cooldown_expire
@@ -683,7 +685,8 @@
 		return
 
 	if (spend_resources())
-		to_chat(owner, span_warning("[src] consumes your blood to stay active."))
+		if(vitae_cost > 0)
+			to_chat(owner, span_warning("[src] consumes your blood to stay active."))
 		if (!duration_override)
 			do_duration(target)
 	else
