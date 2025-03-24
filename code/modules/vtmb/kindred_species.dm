@@ -225,7 +225,7 @@
 	vitae.Grant(C)
 
 	//this needs to be adjusted to be more accurate for blood spending rates
-	var/datum/discipline/bloodheal/giving_bloodheal = new(clamp(13 - C.generation, 1, 10))
+	var/datum/discipline/bloodheal/giving_bloodheal = new(clamp(11 - C.generation, 1, 10))
 	C.give_discipline(giving_bloodheal)
 
 	var/datum/action/blood_power/bloodpower = new()
@@ -386,7 +386,7 @@
 								message_admins("[ADMIN_LOOKUPFLW(sire)] has turned [ADMIN_LOOKUPFLW(childe)] into an Abomination through an admin setting the force_abomination var.")
 								log_game("[key_name(sire)] has turned [key_name(childe)] into an Abomination through an admin setting the force_abomination var.")
 							else
-								switch(storyteller_roll(childe.auspice.level))
+								switch(SSroll.storyteller_roll(childe.auspice.level))
 									if(ROLL_BOTCH)
 										to_chat(sire, span_danger("Something terrible is happening."))
 										to_chat(childe, span_userdanger("Gaia has forsaken you."))
