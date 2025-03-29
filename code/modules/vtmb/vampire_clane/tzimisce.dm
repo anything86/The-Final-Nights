@@ -14,7 +14,7 @@
 	male_clothes = /obj/item/clothing/under/vampire/sport
 	female_clothes = /obj/item/clothing/under/vampire/red
 	clan_keys = /obj/item/vamp/keys/tzimisce
-	enlightenment = TRUE
+	is_enlightened = TRUE
 	var/obj/item/heirl
 	whitelisted = FALSE // dont ruin it
 	current_accessory = "none"
@@ -258,7 +258,6 @@
 	minbodytemp = 0
 	maxbodytemp = 1500
 	faction = list("Tzimisce")
-	pressure_resistance = 200
 	bloodquality = BLOOD_QUALITY_LOW
 	bloodpool = 2
 	maxbloodpool = 2
