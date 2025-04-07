@@ -1359,6 +1359,10 @@
 			var/area/vtm/V = get_area(src)
 			if(V.upper)
 				icon_state = "[initial(icon_state)][rand(1, 11)]-snow"
+	AddComponent(/datum/component/seethrough, get_seethrough_map())
+
+/obj/structure/vamptree/proc/get_seethrough_map()
+	return SEE_THROUGH_MAP_DEFAULT
 
 /obj/structure/vamptree/proc/burnshit()
 	if(!burned)
