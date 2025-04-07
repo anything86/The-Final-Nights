@@ -68,11 +68,9 @@
 	duffelbag = /obj/item/storage/backpack/duffelbag
 
 	implants = list(/obj/item/implant/mindshield)
-//	accessory = /obj/item/clothing/accessory/medal/gold/captain
 
 /datum/outfit/job/prince/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.ignores_warrant = TRUE
 	if(H.gender == FEMALE)
 		uniform = /obj/item/clothing/under/vampire/prince/female
 		shoes = /obj/item/clothing/shoes/vampire/heels
