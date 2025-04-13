@@ -46,8 +46,8 @@
 				to_chat(src, "<span class='warning'>You need [mob]'s attention to do that...</span>")
 				last_drinkblood_use = 0
 				if(client)
-				client.images -= suckbar
-				qdel(suckbar)
+					client.images -= suckbar
+					qdel(suckbar)
 				stop_sound_channel(CHANNEL_BLOOD)
 				return
 			message_admins("[ADMIN_LOOKUPFLW(src)] is attempting to Diablerize [ADMIN_LOOKUPFLW(mob)]")
@@ -134,7 +134,7 @@
 					if(confirmation == "Yes")
 						SEND_SIGNAL(src, COMSIG_PATH_HIT, PATH_SCORE_DOWN, 0)
 						AdjustMasquerade(-1)
-						if(do_mob(src, mob, 600))
+						if(do_mob(src, mob, 60 SECONDS))
 							if(K.generation >= generation)
 								message_admins("[ADMIN_LOOKUPFLW(src)] successfully Diablerized [ADMIN_LOOKUPFLW(mob)]")
 								log_attack("[key_name(src)] successfully Diablerized [key_name(mob)].")
@@ -144,6 +144,7 @@
 								mob.death()
 								if(P2)
 									P2.reason_of_death =  "Diablerized by [true_real_name ? true_real_name : real_name] ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
+								apply_status_effect(STATUS_EFFECT_DIABLERIE_HIGH)
 								adjustBruteLoss(-50, TRUE)
 								adjustFireLoss(-50, TRUE)
 								if(key)
