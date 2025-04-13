@@ -42,48 +42,15 @@
 	if(mob.bloodpool <= 1 && mob.maxbloodpool > 1)
 		to_chat(src, "<span class='warning'>You feel small amount of <b>BLOOD</b> in your victim.</span>")
 		if(iskindred(mob) && iskindred(src))
-			if(!mob.client)
+			if(!mob.client || !mob.key)
 				to_chat(src, "<span class='warning'>You need [mob]'s attention to do that...</span>")
 				return
 			message_admins("[ADMIN_LOOKUPFLW(src)] is attempting to Diablerize [ADMIN_LOOKUPFLW(mob)]")
 			log_attack("[key_name(src)] is attempting to Diablerize [key_name(mob)].")
-			if(mob.key)
-				var/vse_taki = FALSE
-				if(clane)
-					var/salubri_allowed = FALSE
-					var/mob/living/carbon/human/H = mob
-					if(H.clane)
-						if(H.clane.name == "Salubri")
-							salubri_allowed = TRUE
-					if(clane.name != "Banu Haqim" && clane.name != "Caitiff")
-						if(!salubri_allowed)
-							if(!mind.special_role)
-								to_chat(src, "<span class='warning'>You find the idea of drinking your own <b>KIND's</b> blood disgusting!</span>")
-								last_drinkblood_use = 0
-								if(client)
-									client.images -= suckbar
-								qdel(suckbar)
-								stop_sound_channel(CHANNEL_BLOOD)
-								return
-							else
-								vse_taki = TRUE
-						else
-							vse_taki = TRUE
-					else
-						vse_taki = TRUE
-
-				if(!GLOB.canon_event)
-					to_chat(src, "<span class='warning'>It's not a canon event!</span>")
-					return
-
-				if(vse_taki)
-					to_chat(src, "<span class='userdanger'><b>YOU TRY TO COMMIT DIABLERIE ON [mob].</b></span>")
-				else
-					to_chat(src, "<span class='warning'>You find the idea of drinking your own <b>KIND</b> disgusting!</span>")
-					return
-			else
-				to_chat(src, "<span class='warning'>You need [mob]'s attention to do that...</span>")
+			if(!GLOB.canon_event)
+				to_chat(src, "<span class='warning'>It's not a canon event!</span>")
 				return
+			to_chat(src, "<span class='userdanger'><b>YOU TRY TO COMMIT DIABLERIE ON [mob].</b></span>")
 
 	if(!HAS_TRAIT(src, TRAIT_BLOODY_LOVER))
 		if(CheckEyewitness(src, src, 7, FALSE))
@@ -134,7 +101,7 @@
 		if(iskindred(mob))
 			to_chat(src, "<span class='userlove'>[mob]'s blood tastes HEAVENLY...</span>")
 			adjustBruteLoss(-25, TRUE)
-			adjustFireLoss(-25, TRUE)
+			adjustFireLoss(-6, TRUE)
 		else
 			to_chat(src, "<span class='warning'>You sip some <b>BLOOD</b> from your victim. It feels good.</span>")
 		if(HAS_TRAIT(src, TRAIT_MESSY_EATER))
@@ -149,7 +116,6 @@
 		else
 			bloodpool = min(maxbloodpool, bloodpool+bloodgain)
 			adjustBruteLoss(-10, TRUE)
-			adjustFireLoss(-10, TRUE)
 			update_damage_overlays()
 			update_health_hud()
 			update_blood_hud()
@@ -178,8 +144,6 @@
 							diablerist = 1
 					else
 						var/start_prob = 10
-						if(HAS_TRAIT(src, TRAIT_DIABLERIE))
-							start_prob = 30
 						if(prob(min(99, start_prob+((generation-K.generation)*10))))
 							to_chat(src, "<span class='userdanger'><b>[K]'s SOUL OVERCOMES YOURS AND GAIN CONTROL OF YOUR BODY.</b></span>")
 							message_admins("[ADMIN_LOOKUPFLW(src)] tried to Diablerize [ADMIN_LOOKUPFLW(mob)] and was overtaken.")
@@ -199,8 +163,6 @@
 									P.generation = max(P.generation - 1, 7)
 								generation = P.generation
 							diablerist = 1
-							maxHealth = initial(maxHealth)+max(0, 50*(13-generation))
-							health = initial(health)+max(0, 50*(13-generation))
 							if(K.client)
 								var/datum/brain_trauma/special/imaginary_friend/trauma = gain_trauma(/datum/brain_trauma/special/imaginary_friend)
 								trauma.friend.key = K.key
