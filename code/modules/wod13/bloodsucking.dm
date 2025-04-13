@@ -40,10 +40,15 @@
 		mob.Stun(40) //NPCs don't get to resist
 
 	if(mob.bloodpool <= 1 && mob.maxbloodpool > 1)
-		to_chat(src, "<span class='warning'>You feel small amount of <b>BLOOD</b> in your victim.</span>")
+		to_chat(src, "<span class='warning'>You feel only a sliver of <b>BLOOD</b> in your victim.</span>")
 		if(iskindred(mob) && iskindred(src))
 			if(!mob.client || !mob.key)
 				to_chat(src, "<span class='warning'>You need [mob]'s attention to do that...</span>")
+				last_drinkblood_use = 0
+				if(client)
+				client.images -= suckbar
+				qdel(suckbar)
+				stop_sound_channel(CHANNEL_BLOOD)
 				return
 			message_admins("[ADMIN_LOOKUPFLW(src)] is attempting to Diablerize [ADMIN_LOOKUPFLW(mob)]")
 			log_attack("[key_name(src)] is attempting to Diablerize [key_name(mob)].")
@@ -125,54 +130,57 @@
 				if(iskindred(mob) && iskindred(src))
 					var/datum/preferences/P = GLOB.preferences_datums[ckey(key)]
 					var/datum/preferences/P2 = GLOB.preferences_datums[ckey(mob.key)]
-					SEND_SIGNAL(src, COMSIG_PATH_HIT, PATH_SCORE_DOWN, 0)
-					AdjustMasquerade(-1)
-					if(K.generation >= generation)
-						message_admins("[ADMIN_LOOKUPFLW(src)] successfully Diablerized [ADMIN_LOOKUPFLW(mob)]")
-						log_attack("[key_name(src)] successfully Diablerized [key_name(mob)].")
-						if(K.client)
-							var/datum/brain_trauma/special/imaginary_friend/trauma = gain_trauma(/datum/brain_trauma/special/imaginary_friend)
-							trauma.friend.key = K.key
-						mob.death()
-						if(P2)
-							P2.reason_of_death =  "Diablerized by [true_real_name ? true_real_name : real_name] ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
-						adjustBruteLoss(-50, TRUE)
-						adjustFireLoss(-50, TRUE)
-						if(key)
-							if(P)
-								P.diablerist = 1
-							diablerist = 1
-					else
-						var/start_prob = 10
-						if(prob(min(99, start_prob+((generation-K.generation)*10))))
-							to_chat(src, "<span class='userdanger'><b>[K]'s SOUL OVERCOMES YOURS AND GAIN CONTROL OF YOUR BODY.</b></span>")
-							message_admins("[ADMIN_LOOKUPFLW(src)] tried to Diablerize [ADMIN_LOOKUPFLW(mob)] and was overtaken.")
-							log_attack("[key_name(src)] tried to Diablerize [key_name(mob)] and was overtaken.")
-							generation = min(13, P.generation+1)
-							death()
-							if(P)
-								P.reason_of_death = "Failed the Diablerie ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
-						else
-							message_admins("[ADMIN_LOOKUPFLW(src)] successfully Diablerized [ADMIN_LOOKUPFLW(mob)]")
-							log_attack("[key_name(src)] successfully Diablerized [key_name(mob)].")
-							if(P)
-								P.diablerist = 1
-								if(mob.generation + 3 < generation)
-									P.generation = max(P.generation - 2, 7)
+					var/confirmation = input(src, "ATTEMPT TO DIABLERIZE [mob]?") in list("No", "Yes")
+					if(confirmation == "Yes")
+						SEND_SIGNAL(src, COMSIG_PATH_HIT, PATH_SCORE_DOWN, 0)
+						AdjustMasquerade(-1)
+						if(do_mob(src, mob, 600))
+							if(K.generation >= generation)
+								message_admins("[ADMIN_LOOKUPFLW(src)] successfully Diablerized [ADMIN_LOOKUPFLW(mob)]")
+								log_attack("[key_name(src)] successfully Diablerized [key_name(mob)].")
+								if(K.client)
+									var/datum/brain_trauma/special/imaginary_friend/trauma = gain_trauma(/datum/brain_trauma/special/imaginary_friend)
+									trauma.friend.key = K.key
+								mob.death()
+								if(P2)
+									P2.reason_of_death =  "Diablerized by [true_real_name ? true_real_name : real_name] ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
+								adjustBruteLoss(-50, TRUE)
+								adjustFireLoss(-50, TRUE)
+								if(key)
+									if(P)
+										P.diablerist = 1
+									diablerist = 1
+							else
+								var/start_prob = 10
+								if(prob(min(99, start_prob+((generation-K.generation)*10))))
+									to_chat(src, "<span class='userdanger'><b>[K]'s SOUL OVERCOMES YOURS AND GAIN CONTROL OF YOUR BODY.</b></span>")
+									message_admins("[ADMIN_LOOKUPFLW(src)] tried to Diablerize [ADMIN_LOOKUPFLW(mob)] and was overtaken.")
+									log_attack("[key_name(src)] tried to Diablerize [key_name(mob)] and was overtaken.")
+									generation = min(13, P.generation+1)
+									death()
+									if(P)
+										P.reason_of_death = "Failed the Diablerie ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
 								else
-									P.generation = max(P.generation - 1, 7)
-								generation = P.generation
-							diablerist = 1
-							if(K.client)
-								var/datum/brain_trauma/special/imaginary_friend/trauma = gain_trauma(/datum/brain_trauma/special/imaginary_friend)
-								trauma.friend.key = K.key
-							mob.death()
-							if(P2)
-								P2.reason_of_death = "Diablerized by [true_real_name ? true_real_name : real_name] ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
-					if(client)
-						client.images -= suckbar
-					qdel(suckbar)
-					return
+									message_admins("[ADMIN_LOOKUPFLW(src)] successfully Diablerized [ADMIN_LOOKUPFLW(mob)]")
+									log_attack("[key_name(src)] successfully Diablerized [key_name(mob)].")
+									if(P)
+										P.diablerist = 1
+										if(mob.generation + 3 < generation)
+											P.generation = max(P.generation - 2, 7)
+										else
+											P.generation = max(P.generation - 1, 7)
+										generation = P.generation
+									diablerist = 1
+									if(K.client)
+										var/datum/brain_trauma/special/imaginary_friend/trauma = gain_trauma(/datum/brain_trauma/special/imaginary_friend)
+										trauma.friend.key = K.key
+									mob.death()
+									if(P2)
+										P2.reason_of_death = "Diablerized by [true_real_name ? true_real_name : real_name] ([time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")])."
+							if(client)
+								client.images -= suckbar
+							qdel(suckbar)
+							return
 				else
 					K.blood_volume = 0
 			if(ishuman(mob) && !iskindred(mob))
