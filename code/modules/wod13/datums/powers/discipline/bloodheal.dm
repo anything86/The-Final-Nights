@@ -56,9 +56,6 @@
 	if (brain)
 		brain.applyOrganDamage(-HEAL_BASHING_LETHAL * (vitae_cost*5))
 		brain.cure_all_traumas(TRAUMA_RESILIENCE_WOUND)
-		/*for (var/i in 1 to min(vitae_cost*10, length(brain.get_traumas_type())))
-			var/datum/brain_trauma/healing_trauma = pick(brain.get_traumas_type())
-			brain.cure_trauma_type(healing_trauma, resilience = TRAUMA_RESILIENCE_WOUND)*/
 
 	//miscellaneous organ damage healing
 	var/obj/item/organ/eyes/eyes = owner.getorganslot(ORGAN_SLOT_EYES)
