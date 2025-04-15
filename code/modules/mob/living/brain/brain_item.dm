@@ -228,9 +228,10 @@
 	return ..()
 
 /obj/item/organ/brain/on_life()
-	if(damage >= BRAIN_DAMAGE_DEATH) //rip
-		to_chat(owner, "<span class='userdanger'>The last spark of life in your brain fizzles out...</span>")
-		owner.death()
+	if(!(iskindred(src.owner) || iscathayan(src.owner)))
+		if(damage >= BRAIN_DAMAGE_DEATH) //rip
+			to_chat(owner, "<span class='userdanger'>The last spark of life in your brain fizzles out...</span>")
+			owner.death()
 
 /obj/item/organ/brain/check_damage_thresholds(mob/M)
 	. = ..()
