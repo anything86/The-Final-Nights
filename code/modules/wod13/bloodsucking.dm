@@ -130,11 +130,11 @@
 				if(iskindred(mob) && iskindred(src))
 					var/datum/preferences/P = GLOB.preferences_datums[ckey(key)]
 					var/datum/preferences/P2 = GLOB.preferences_datums[ckey(mob.key)]
-					var/confirmation = input(src, "ATTEMPT TO DIABLERIZE [mob]?") in list("No", "Yes")
+					var/confirmation = tgui_alert(src, "Attempt to diablerize [mob]?", "Diablerize", buttons = list("Yes", "No"))
 					if(confirmation == "Yes")
 						SEND_SIGNAL(src, COMSIG_PATH_HIT, PATH_SCORE_DOWN, 0)
 						AdjustMasquerade(-1)
-						if(do_mob(src, mob, 60 SECONDS))
+						if(do_after(src, 60 SECONDS, mob))
 							if(K.generation >= generation)
 								message_admins("[ADMIN_LOOKUPFLW(src)] successfully Diablerized [ADMIN_LOOKUPFLW(mob)]")
 								log_attack("[key_name(src)] successfully Diablerized [key_name(mob)].")
