@@ -40,7 +40,7 @@
 		mob.Stun(40) //NPCs don't get to resist
 
 	if(mob.bloodpool <= 1 && mob.maxbloodpool > 1)
-		to_chat(src, "<span class='warning'>You feel only a sliver of <b>BLOOD</b> in your victim.</span>")
+		to_chat(src, span_warning("You feel only a sliver of <b>BLOOD</b> in your victim."))
 		if(iskindred(mob) && iskindred(src))
 			if(!mob.client || !mob.key)
 				to_chat(src, "<span class='warning'>You need [mob]'s attention to do that...</span>")
@@ -55,7 +55,7 @@
 			if(!GLOB.canon_event)
 				to_chat(src, "<span class='warning'>It's not a canon event!</span>")
 				return
-			to_chat(src, "<span class='userdanger'><b>YOU TRY TO COMMIT DIABLERIE ON [mob].</b></span>")
+			to_chat(src, span_userdanger("YOU TRY TO COMMIT DIABLERIE ON [mob]."))
 
 	if(!HAS_TRAIT(src, TRAIT_BLOODY_LOVER))
 		if(CheckEyewitness(src, src, 7, FALSE))
