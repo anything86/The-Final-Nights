@@ -154,7 +154,7 @@
 							else
 								var/start_prob = 10
 								if(prob(min(99, start_prob+((generation-K.generation)*10))))
-									to_chat(src, "<span class='userdanger'><b>[K]'s SOUL OVERCOMES YOURS AND GAIN CONTROL OF YOUR BODY.</b></span>")
+									to_chat(src, span_userdanger("[K]'s SOUL OVERCOMES YOURS AND GAIN CONTROL OF YOUR BODY."))
 									message_admins("[ADMIN_LOOKUPFLW(src)] tried to Diablerize [ADMIN_LOOKUPFLW(mob)] and was overtaken.")
 									log_attack("[key_name(src)] tried to Diablerize [key_name(mob)] and was overtaken.")
 									generation = min(13, P.generation+1)
