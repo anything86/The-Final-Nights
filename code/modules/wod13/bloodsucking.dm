@@ -53,7 +53,7 @@
 			message_admins("[ADMIN_LOOKUPFLW(src)] is attempting to Diablerize [ADMIN_LOOKUPFLW(mob)]")
 			log_attack("[key_name(src)] is attempting to Diablerize [key_name(mob)].")
 			if(!GLOB.canon_event)
-				to_chat(src, "<span class='warning'>It's not a canon event!</span>")
+				to_chat(src, span_warning("It's not a canon event!"))
 				return
 			to_chat(src, span_userdanger("YOU TRY TO COMMIT DIABLERIE ON [mob]."))
 
