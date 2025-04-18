@@ -1041,5 +1041,5 @@
 	owner.remove_movespeed_modifier(/datum/movespeed_modifier/diablerie_high)
 	owner.additional_dexterity += 2
 	owner.additional_mentality += 1
-	if(HAS_TRAIT(owner, TRAIT_IGNORESLOWDOWN))
-		REMOVE_TRAIT(owner, TRAIT_IGNORESLOWDOWN, SPECIES_TRAIT)
+	if(HAS_TRAIT(owner, TRAIT_IGNOREDAMAGESLOWDOWN))
+		REMOVE_TRAIT(owner, TRAIT_IGNOREDAMAGESLOWDOWN, SPECIES_TRAIT)
