@@ -26,7 +26,7 @@
 	. = ..()
 
 	ADD_TRAIT(owner, TRAIT_NIGHT_VISION, TRAIT_GENERIC)
-	owner.client.view_size.zoomOut(1)
+	ADD_TRAIT(owner, TRAIT_AUSPEX_HEARING, TRAIT_GENERIC)
 
 	owner.update_sight()
 
@@ -34,7 +34,7 @@
 	. = ..()
 
 	REMOVE_TRAIT(owner, TRAIT_NIGHT_VISION, TRAIT_GENERIC)
-	owner.client.view_size.zoomIn()
+	REMOVE_TRAIT(owner, TRAIT_AUSPEX_HEARING, TRAIT_GENERIC)
 
 	owner.update_sight()
 

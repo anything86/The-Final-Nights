@@ -346,8 +346,11 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 	var/rendered = compose_message(src, message_language, message, , spans, message_mods)
 	for(var/_AM in listening)
 		var/atom/movable/AM = _AM
+		if(ishuman(AM) && HAS_TRAIT(AM, TRAIT_AUSPEX_HEARING))
+			eavesdrop_range += 2
 		if(eavesdrop_range && get_dist(source, AM) > message_range && !(the_dead[AM]))
-			AM.Hear(eavesrendered, src, message_language, eavesdropping, , spans, message_mods)
+			if(get_dist(source, AM) <= (eavesdrop_range-1))
+				AM.Hear(eavesrendered, src, message_language, eavesdropping, , spans, message_mods)
 		else
 			AM.Hear(rendered, src, message_language, message, , spans, message_mods)
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_LIVING_SAY_SPECIAL, src, message)

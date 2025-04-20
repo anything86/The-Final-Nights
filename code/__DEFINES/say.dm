@@ -72,7 +72,7 @@
 #define NOPASS			(1<<2)
 
 //Eavesdropping
-#define EAVESDROP_EXTRA_RANGE 1 //how much past the specified message_range does the message get starred, whispering only
+#define EAVESDROP_EXTRA_RANGE 3 //how much past the specified message_range does the message get starred, whispering only
 
 /// How close intercoms can be for radio code use
 #define MODE_RANGE_INTERCOM 1
