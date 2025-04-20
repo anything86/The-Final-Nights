@@ -1005,7 +1005,7 @@
 	if (HAS_TRAIT(src, TRAIT_HUSK))
 		return DEFIB_FAIL_HUSK
 
-	if (iskindred(src) || iscathayan(src))
+	if(mind.damned)
 		return DEFIB_FAIL_SUICIDE
 
 	if ((getBruteLoss() >= MAX_REVIVE_BRUTE_DAMAGE) || (getFireLoss() >= MAX_REVIVE_FIRE_DAMAGE))
