@@ -131,6 +131,14 @@
 					client.images -= suckbar
 				qdel(suckbar)
 				return
+			if(clane.name == "Salubri Antitribu" && ishuman(mob))
+				if((mob.maxHealth - mob.health) < 60) //At least 60 damage
+					to_chat(src, span_warning("This blood is lacking in pain and adrenaline, I would not derive any substance from it."))
+					stop_sound_channel(CHANNEL_BLOOD)
+					if(client)
+						client.images -= suckbar
+					qdel(suckbar)
+					return
 		if(iskindred(mob))
 			to_chat(src, "<span class='userlove'>[mob]'s blood tastes HEAVENLY...</span>")
 			adjustBruteLoss(-25, TRUE)
