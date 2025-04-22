@@ -35,6 +35,7 @@
 #define CLAN_TRUE_BRUJAH "True Brujah"
 #define CLAN_OLD_TZIMISCE "Old Clan Tzimisce"
 #define CLAN_SALUBRI "Salubri"
+#define CLAN_SALUBRI_ANTITRIBU "Salubri Antitribu"
 #define CLAN_BAALI "Baali"
 #define CLAN_KIASYD "Kiasyd"
 #define CLAN_LASOMBRA "Lasombra"
