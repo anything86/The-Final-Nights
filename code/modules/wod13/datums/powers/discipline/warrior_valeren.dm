@@ -29,5 +29,5 @@
 	to_chat(owner, "<b>[target]</b> has <b>[num2text(target.bloodpool)]/[target.maxbloodpool]</b> blood points.")
 	if(iskindred(target))
 		if(target.dna.species.disciplines?.Fortitude)
-			to_chat(owner, "<b>[target]</b> has a Fortitude rating of <b>[target.morality_path?.score]</b> on their path.")
+			to_chat(owner, "<b>[target]</b> has a Fortitude rating of <b>[target.dna.species.disciplines.Fortitude.level]</b>")
 
