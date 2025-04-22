@@ -980,6 +980,7 @@
 	var/mob/living/carbon/user = owner
 	user.remove_movespeed_modifier(/datum/movespeed_modifier/silver_slowdown)
 
+//PRESENCE 1 - AWE
 /datum/status_effect/awe //Used for powers that force a target to walk to you.
 	id = "awe"
 	status_type = STATUS_EFFECT_UNIQUE
@@ -1003,5 +1004,34 @@
 	H.Immobilize(2) //So our victim doesn't just walk in the opposite direction.
 
 /datum/status_effect/awe/Destroy()
+	source = null
+	return ..()
+
+//WARRIOR VALEREN 3 - BURNING TOUCH
+/datum/status_effect/burning_touch
+	id = "burning_touch"
+	status_type = STATUS_EFFECT_REFRESH
+	duration = 6 SECONDS //Two turns
+	tick_interval = 1 SECONDS
+	alert_type = /atom/movable/screen/alert/status_effect/burning_touch
+	var/mob/living/carbon/human/source
+
+/atom/movable/screen/alert/status_effect/burning_touch
+	name = "Burning Touch"
+	desc = "It burns! It burns!!"
+	icon_state = "fire"
+
+/datum/status_effect/burning_touch/on_creation(mob/living/carbon/new_owner, mob/living/carbon/human/new_source)
+	. = ..()
+	source = new_source
+
+/datum/status_effect/burning_touch/tick()
+	var/mob/living/carbon/H = owner
+	if(source.pulling == H)
+		H.adjustStaminaLoss(40, forced = TRUE)
+		H.emote("scream")
+		H.apply_status_effect(STATUS_EFFECT_BURNING_TOUCH, owner)
+
+/datum/status_effect/burning_touch/Destroy()
 	source = null
 	return ..()
