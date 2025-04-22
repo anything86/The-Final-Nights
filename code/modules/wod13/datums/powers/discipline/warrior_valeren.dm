@@ -146,7 +146,7 @@
 	var/obj/item/I = owner.get_active_held_item()
 	owner.dna.species.meleemod += 2 //3x damage, additive.
 	I.armour_penetration += 40
-	owner.visible_message(span_bolddanger("[owner]'s third eye flashes open, delivering a masterful blow to [target] with their [I]!"))
+	owner.visible_message(span_bolddanger("[owner]'s third eye flashes open, delivering a masterful blow to [target] with [I]!"))
 	playsound(target.loc, I.hitsound, 100, FALSE)
 	target.attacked_by(I, owner)
 	owner.dna.species.meleemod -= 2
