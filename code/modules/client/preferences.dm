@@ -2228,6 +2228,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 									morality_path = new /datum/morality/heart()
 								if(CLAN_BAALI)
 									morality_path = new /datum/morality/hive()
+								if(CLAN_SALUBRI_ANTITRIBU)
+									morality_path = new /datum/morality/samiel()
 						path_score = morality_path.score
 						if(clane.no_hair)
 							hairstyle = "Bald"
