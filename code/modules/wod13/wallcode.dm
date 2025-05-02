@@ -69,13 +69,15 @@
 
 /turf/closed/wall/vampwall/MouseDrop_T(atom/dropping, mob/user, params)
 	. = ..()
+	if(islupus(user))
+		return
 	if(user.a_intent != INTENT_HARM)
 		LoadComponent(/datum/component/leanable, dropping)
 	else
 		if(get_dist(user, src) < 2)
 			var/turf/above_turf = locate(user.x, user.y, user.z + 1)
 			if(above_turf && istype(above_turf, /turf/open/openspace))
-				var/mob/living/carbon/human/carbon_human = user
+				var/mob/living/carbon_human = user
 				carbon_human.climb_wall(above_turf)
 			else
 				to_chat(user, "<span class='warning'>You can't climb there!</span>")
@@ -384,7 +386,7 @@
 /obj/effect/decal/asphalt/Initialize()
 	..()
 	icon_state = "decal[rand(1, 24)]"
-	update_icon()
+	update_appearance()
 	if(GLOB.winter)
 		if(istype(get_area(src), /area/vtm))
 			var/area/vtm/V = get_area(src)
@@ -410,7 +412,7 @@
 /obj/effect/decal/asphaltline/Initialize()
 	..()
 	icon_state = "[initial(icon_state)][rand(1, 3)]"
-	update_icon()
+	update_appearance()
 	if(GLOB.winter)
 		if(istype(get_area(src), /area/vtm))
 			var/area/vtm/V = get_area(src)
@@ -426,7 +428,7 @@
 /obj/effect/decal/crosswalk/Initialize()
 	..()
 	icon_state = "crosswalk[rand(1, 3)]"
-	update_icon()
+	update_appearance()
 	if(GLOB.winter)
 		if(istype(get_area(src), /area/vtm))
 			var/area/vtm/V = get_area(src)
@@ -458,7 +460,7 @@
 				heavyfootstep = FOOTSTEP_SNOW
 	if(prob(50))
 		icon_state = "asphalt[rand(1, 3)]"
-		update_icon()
+		update_appearance()
 	if(prob(25))
 		new /obj/effect/decal/asphalt(src)
 	set_light(1, 0.5, "#a4b7ff")
@@ -1125,6 +1127,20 @@
 /turf/open/floor/plating/vampocean/Initialize()
 	..()
 	set_light(1, 0.5, "#a4b7ff")
+
+/turf/open/floor/plating/vampcrossableocean
+	gender = PLURAL
+	name = "water"
+	icon = 'code/modules/wod13/tiles.dmi'
+	icon_state = "ocean"
+	flags_1 = NONE
+	attachment_holes = FALSE
+	bullet_bounce_sound = null
+	footstep = FOOTSTEP_WATER
+	barefootstep = FOOTSTEP_WATER
+	clawfootstep = FOOTSTEP_HARD_CLAW
+	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
+	density = FALSE
 
 /turf/open/floor/plating/vampacid
 	gender = PLURAL
